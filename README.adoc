@@ -1,6 +1,5 @@
 = Cinema - Mario Lengauer
 :source-highlighter: coderay
-:sourcedir: src/main/java/at/htl/cinema
 
 
 == Übersicht
@@ -32,15 +31,10 @@ quarkus.datasource.max-size=13
 quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 
-==== Entitäten erstellen
-[source,java]
+=== Dependencies hinzufügen 44-51
+[source,xml]
 ----
-include::{sourcedir}/model/Cinema.java[lines=9..35;77..78]
-----
-==== 4. InitBean erstellen
-[source, java]
-----
-include::{sourcedir}/business/InitBean.java[lines=17..41]
+include::pom.xml[lines=44..51]
 ----
 == Db im Docker Container Starten
 [source]
