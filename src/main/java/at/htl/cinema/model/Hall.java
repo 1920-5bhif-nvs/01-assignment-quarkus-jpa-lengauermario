@@ -1,10 +1,7 @@
 package at.htl.cinema.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @NamedQuery(name = "Hall.findAll", query = "select h from Hall h")
@@ -17,9 +14,8 @@ public class Hall {
     private String name;
     private int seating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="cinema_id")
-    @JsonbTransient
     private Cinema cinema;
 
     public Hall() {

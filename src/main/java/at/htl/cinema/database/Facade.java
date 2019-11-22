@@ -2,10 +2,11 @@ package at.htl.cinema.database;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 abstract class Facade<T> {
-    @Inject
+    @PersistenceContext
     EntityManager em;
 
     public T insert(T t) {

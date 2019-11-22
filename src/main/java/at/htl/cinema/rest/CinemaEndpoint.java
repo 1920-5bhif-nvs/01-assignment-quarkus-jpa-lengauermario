@@ -15,12 +15,12 @@ import java.util.List;
 public class CinemaEndpoint {
 
     @Inject
-    CinemaFacade cinemaFacde;
+    CinemaFacade cinemaFacade;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<Cinema> cinemas = cinemaFacde.getAll();
+        List<Cinema> cinemas = cinemaFacade.getAll();
         return Response.ok(cinemas).build();
     }
 
@@ -28,7 +28,7 @@ public class CinemaEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response getById(@PathParam("id") long id) {
-        Cinema c = cinemaFacde.getById(id);
+        Cinema c = cinemaFacade.getById(id);
         if(c != null){
             return Response.ok(c).build();
         }else{
@@ -36,10 +36,12 @@ public class CinemaEndpoint {
         }
     }
     @DELETE
+    @Path("/{id}")
+    @Transactional
     public Response deleteCinema(@PathParam("id")long id){
-        Cinema c = cinemaFacde.getById(id);
+        Cinema c = cinemaFacade.getById(id);
         if(c != null){
-            cinemaFacde.delete(c);
+            cinemaFacade.delete(c);
         }
         return Response.ok().build();
     }
@@ -50,7 +52,7 @@ public class CinemaEndpoint {
     @Transactional
     public Response addCinema(Cinema c) {
         try {
-            c = cinemaFacde.insert(c);
+            c = cinemaFacade.insert(c);
            // cinemaFacde.insert(c);
         }catch(PersistenceException e){
             return Response.status(400).build();
@@ -63,7 +65,7 @@ public class CinemaEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response updateCinema(Cinema c) {
-        c = cinemaFacde.update(c);
+        c = cinemaFacade.update(c);
         return Response.ok(c).build();
     }
 }

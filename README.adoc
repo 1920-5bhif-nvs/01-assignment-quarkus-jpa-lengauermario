@@ -18,7 +18,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.0.0.CR1:create \
     -Dpath="/cinema"
 ----
 
-==== DB konfigurieren
+== DB konfigurieren
 in application.properties folgendes eintragen:
 [source]
 ----
@@ -36,18 +36,11 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 ----
 include::pom.xml[lines=44..51]
 ----
-== Db im Docker Container Starten
+=== Db im Docker Container Starten
 [source]
 ----
 docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=passme -d postgres
 ----
-
-== Quarkus im Dev Mode starten:
-[source]
-----
-mvnw compile quarkus:dev
-----
-
 == Swagger UI
 Extension installieren
 [source]
@@ -60,3 +53,22 @@ Erreichbar unter
 ----
 http://localhost:8080/swagger-ui/
 ----
+== Quarkus starten:
+im Dev Mode:
+[source]
+----
+mvnw compile quarkus:dev
+----
+im production Mode (im Docker):
+[source]
+----
+mvnw clean package
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/cinema .
+docker run -i --rm -p 8080:8080 quarkus/cinema
+----
+Da ich die DockerToolbox verwende ist der Service erreichbar unter
+[source]
+----
+http://192.168.99.100:8080/cinema
+----
+

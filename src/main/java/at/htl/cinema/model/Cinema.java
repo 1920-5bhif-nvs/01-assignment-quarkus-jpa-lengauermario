@@ -2,11 +2,13 @@ package at.htl.cinema.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
-import javax.json.bind.annotation.JsonbDateFormat;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -18,6 +20,7 @@ import java.util.List;
 @XmlRootElement
 @Entity
 @NamedQuery(name = "Cinema.findAll", query = "select c from Cinema c")
+@JsonIgnoreProperties(value = { "halls" })
 public class Cinema {
 
     @Id
@@ -25,15 +28,17 @@ public class Cinema {
     private Long id;
     private String name;
     private String address;
-    @JsonbDateFormat(value = "yyyy-MM-dd")
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate founded;
 
 
     @OneToMany(
             mappedBy = "cinema",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true
+            cascade = {CascadeType.REFRESH,CascadeType.MERGE},
+            fetch = FetchType.EAGER
     )
     private List<Hall> halls;
 
